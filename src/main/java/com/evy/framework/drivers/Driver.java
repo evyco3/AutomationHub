@@ -10,8 +10,8 @@ import java.time.Duration;
 /**
  * Manages a WebDriver instance for the current thread.
  * <p>
- * Provides methods to initialize, configure, and quit a WebDriver instance.
- * Each thread gets its own WebDriver instance.
+ * This class provides methods to initialize, configure, and quit a WebDriver instance.
+ * Each thread gets its own WebDriver instance to avoid conflicts in parallel execution.
  * </p>
  */
 public final class Driver {
@@ -24,7 +24,7 @@ public final class Driver {
     }
 
     /**
-     * Gets the singleton instance of Driver.
+     * Gets the singleton instance of the Driver class.
      *
      * @return the singleton Driver instance
      */
@@ -35,7 +35,7 @@ public final class Driver {
     /**
      * Initializes the WebDriver for the specified browser type.
      * <p>
-     * Sets up and configures the WebDriver, storing it in a thread-local variable.
+     * Sets up and configures the WebDriver based on the given browser type and stores it in a thread-local variable.
      * </p>
      *
      * @param browserType the type of browser to initialize
@@ -55,10 +55,10 @@ public final class Driver {
     /**
      * Quits the WebDriver and removes it from the current thread.
      * <p>
-     * Closes and cleans up the WebDriver instance.
+     * Closes the WebDriver instance and cleans up resources.
      * </p>
      */
-    public static void quitDriver() {
+    public void quitDriver() {
         try {
             WebDriver driver = THREAD_LOCAL.get();
             if (driver != null) {
@@ -73,9 +73,18 @@ public final class Driver {
     }
 
     /**
+     * Retrieves the WebDriver instance for the current thread.
+     *
+     * @return the WebDriver instance
+     */
+    public WebDriver getDriver() {
+        return THREAD_LOCAL.get();
+    }
+
+    /**
      * Configures the WebDriver with timeouts and initial URL.
      * <p>
-     * Sets page load timeout, implicit wait timeout, and navigates to the configured URL.
+     * Sets the page load timeout, implicit wait timeout, and navigates to the configured URL.
      * </p>
      *
      * @param driver the WebDriver to configure
